@@ -2,23 +2,23 @@
 #include <omp.h>
 #include <time.h>
 using namespace std;
-
+int sizing = 1000000;
 int eprimo(double num);
 
 int main()
 {
-    double num[100], soma = 0, mult = 1, somp = 0, tid;
-    for (int i = 0; i < 100; i++)
+    double num[sizing], soma = 0, mult = 1, somp = 0, tid;
+    for (int i = 0; i < sizing; i++)
     {
-        num[i] = i;
-        //num[i] = rand() % 100;
+        num[i] = i+1;
+        num[i] = rand() % sizing;
         cout << num[i] << " ";
     }
     cout << "\n";
-#pragma omp parallel private(tid) shared(num, somp, soma, mult)
+#pragma omp parallel private(tid) shared(num, somp, soma, mult, sizing)
     {
         tid = (omp_get_thread_num());
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < sizing; i++)
         {
             if (tid == 1)
             {
@@ -30,18 +30,15 @@ int main()
             }
             if (tid == 3)
             {
-                int tid2;
-#pragma omp parallel private(tid2) shared(somp, num)
+                if (eprimo(num[i]))
                 {
-                    if (eprimo(num[i]))
-                    {
-                        cout << num[i] << endl;
-                        somp += num[i];
-                    }
+                    cout << num[i] << endl;
+                    somp += num[i];
                 }
             }
         }
     }
+
     cout << "soma : " << soma << endl;
     cout << "soma de primos :" << somp << endl;
     cout << "miltiplicação : " << mult << endl;
@@ -50,9 +47,10 @@ int main()
 
 int eprimo(double num)
 {
-    if (num < 2) return 0;
-        for (int i = 2; i * i <= num; i++)
-            if (!((int)num % i))
-                return 0;
+    if (num < 2)
+        return 0;
+    for (int i = 2; i * i <= num; i++)
+        if (!((int)num % i))
+            return 0;
     return 1;
 }
