@@ -10,7 +10,7 @@ int main()
     double num[100], soma = 0, mult = 1, somp = 0, tid;
     for (int i = 0; i < 100; i++)
     {
-        num[i]=i;
+        num[i] = i;
         //num[i] = rand() % 100;
         cout << num[i] << " ";
     }
@@ -50,8 +50,9 @@ int main()
 
 int eprimo(double num)
 {
-    for (int i = 2; i * i <= num; i++)
-        if (!((int)num % i))
-            return 0;
+    if (num < 2) return 0;
+        for (int i = 2; i * i <= num; i++)
+            if (!((int)num % i))
+                return 0;
     return 1;
 }
